@@ -1,0 +1,2 @@
+Notes:
+res = [test_date + datetime.timedelta(days=idx) for idx in range(K)]
