@@ -10,15 +10,15 @@ from sklearn.metrics import classification_report, confusion_matrix, ConfusionMa
 import matplotlib.pyplot as plt
 
 class MachineLearning:
-    def __init__(self, csv_in):
-        self.csv_in = csv_in # path of csv, assume follows fixed structure
+  def __init__(self, csv_in):
+      self.csv_in = csv_in # path of csv, assume follows fixed structure
 
-def preprocessing(self):
+  def preprocessing(self):
     '''
         This method will carry out data preprocessing and return the processed DataFrame.
         Also, this return y_test and y_pred for further metrics calculations.
     '''
-    # Open scrapped content 
+      # Open scrapped content 
     df = pd.read_csv(self.csv_in, header=None)
     df.columns=["index", "link", "title", "comment_date", "comment","n_A", "label","made_by"]
     df.drop(["n_A", "made_by"], axis=1, inplace=True)
@@ -47,10 +47,9 @@ def preprocessing(self):
       sentiments.append(sentiment)
     df["sentiment"] = sentiments
     df['label'].replace({'No': 0, 'Yes': 1}, inplace=True) # turn yes to 1 and no to 0
-  
     return df
 
-def train(self, df):
+  def train(self, df):
     '''
         This method will conduct machine learning stage with the processed DataFrame, df.
     '''
@@ -84,7 +83,7 @@ def train(self, df):
     
     return y_test, y_pred
 
-def performance(self, y_test, y_pred):
+  def performance(self, y_test, y_pred):
     print("Classification Report:\n", classification_report(y_test, y_pred))
     print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred))
     cm_display = ConfusionMatrixDisplay(confusion_matrix = confusion_matrix(y_test, y_pred), display_labels = [False, True])
