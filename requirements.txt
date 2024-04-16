@@ -5,5 +5,4 @@ snownlp
 scikit-learn
 matplotlib
 datetime
-time
 pytz
