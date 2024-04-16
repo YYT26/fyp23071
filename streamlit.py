@@ -10,7 +10,7 @@ current_time = datetime.datetime.now(pytz.timezone("Asia/Shanghai"))
 'To begin with the dashboard, head to the navigation bar on the left and select desired bank and date.'
 with st.sidebar:
     st.subheader("1. Choose a bank:")
-    bank = st.selectbox("Bank to be reviewed", ("HSBC - The Hongkong Shanghai Banking Corporation Limited", "SCB - Standarad Chartered Hong Kong", "BOCHK - Bank of China (Hong Kong) Limited", "Citi - Citibank (Hong Kong) Limited"))
+    bank = st.selectbox("Bank to be reviewed", ("HSBC - The Hongkong Shanghai Banking Corporation Limited", "SCB - Standarad Chartered Hong Kong", "HASE - Hang Seng Bank Limited", "Citi - Citibank (Hong Kong) Limited"))
     st.subheader("2. Choose a date to preview: ")
     start_time = pytz.timezone('Asia/Shanghai').localize(datetime.datetime(2021, 1, 1))
     dates = [current_time + datetime.timedelta(days=-i) for i in range((current_time - start_time).days + 1)]
@@ -29,8 +29,8 @@ def load():
 with st.spinner("Loading data..."):
     df=load()
     # fix data format
-    display = df.loc[df['comment_date']==period && df["bank"]==bank]
-    st.dataframe(display)
+    # display = df.loc[df['comment_date']==period && df["bank"]==bank]
+    st.dataframe(df)
 
 
 
