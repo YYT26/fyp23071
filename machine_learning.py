@@ -20,7 +20,7 @@ class MachineLearning:
     '''
       # Open scrapped content 
     df = pd.read_csv(self.csv_in, header=None)
-    df.columns=["index", "link", "title", "comment_date", "comment","n_A", "label","made_by"]
+    df.columns=["index", "link", "title", "comment_date", "comment","n_A", "label","made_by"] # df structure
     df.drop(["n_A", "made_by"], axis=1, inplace=True)
 
     # Stop word removal

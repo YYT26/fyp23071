@@ -7,7 +7,6 @@ st.title('Real-time Monitoring of Social Media Sentiment for Detecting Operation
 
 current_time = datetime.datetime.now(pytz.timezone("Asia/Shanghai"))
 
-'Data updated at ' + str(current_time.strftime("%Y/%m/%d")) + ". " + '[To be removed] Auto-update is carried out at 01:00 every day.'
 'To begin with the dashboard, head to the navigation bar on the left and select desired bank and date.'
 with st.sidebar:
     st.subheader("1. Choose a bank:")
@@ -29,9 +28,9 @@ def load():
 
 with st.spinner("Loading data..."):
     df=load()
-    st.dataframe(df)
-
-# df.loc[df['comment_date']==period]
+    # fix data format
+    display = df.loc[df['comment_date']==period && df["bank"]==bank]
+    st.dataframe(display)
 
 
 
