@@ -1,0 +1,7 @@
+streamlit
+TCSP
+snownlp
+scikit-learn
+matplotlib
+datetime
+time
