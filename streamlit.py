@@ -2,6 +2,7 @@ from machine_learning import MachineLearning
 import streamlit as st
 import datetime
 import pytz
+import pandas as pd
 
 st.title('Real-time Monitoring of Social Media Sentiment for Detecting Operational Incidents in Banking')
 
@@ -18,13 +19,24 @@ with st.sidebar:
     period = st.selectbox("Please select the date: ", Dates)
 
 st.divider()
+
+# TODO #1 General: volume and senitment graph of data
+
 st.info('You are looking at data of '+bank[0:bank.find(" ")]+' at '+period+".", icon="ℹ️")
 
 # load
 st.cache(allow_output_mutation=True)
 def load():
-    ML = MachineLearning("data (1).csv")
-    return ML.preprocessing()
+    ML = pd.read_csv("processed_data.csv")
+    return ML
+
+# TODO #2 General: data sorted by date
+# df.sort_values
+volume = []
+sentiment = 1
+
+"Volume of the day:", volume
+"Sentiment score of the day", sentiment*100
 
 with st.spinner("Loading data..."):
     df=load()
