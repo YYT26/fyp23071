@@ -4,15 +4,18 @@ from snownlp import SnowNLP # chinese NLP
 
 df = pd.read_csv("data (1).csv")
 df.columns=["index", "link", "title", "comment_date", "comment","n_A", "label","made_by"] # df structure
-print(len(df.index))
+
 ## remove unecessary columns
 df.drop(["n_A", "made_by"], axis=1, inplace=True)
 
-## comment_date: replace na values with value after
+# comment_date: replace na values with value after
 df["comment_date"].fillna(method="bfill", inplace=True)
 
-## Label bank based on title
-df_result = pd.read_csv("LIHKG_News_all_results(1).csv")
+# comment_date: transform data type to datetime
+df["comment_date"] = pd.to_datetime(df["comment_date"].apply(lambda x: x[0:x.find(" ")-1].replace("年", "-").replace("月", "-")), format="%Y-%m-%d")
+
+# Label bank based on title
+df_result = pd.read_csv("data_scaped/LIHKG_News_all_results(1).csv")
 df_title={"title":[],
           "bank":[]}
 for i in df['title'].drop_duplicates():
@@ -55,4 +58,5 @@ df["sentiment"] = sentiments
 # Turn "Yes" to 1 and "No" to 0
 df['label'].replace({'No': 0, 'Yes': 1}, inplace=True) # turn yes to 1 and no to 0
 
+# output the processed data into csv, for shorter loading time in streamlit
 df.to_csv("processed_data.csv", index=False)
