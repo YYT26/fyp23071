@@ -1,6 +1,4 @@
-from machine_learning import MachineLearning
 import streamlit as st
-import datetime
 import pandas as pd
 import plotly.express as px
 
@@ -12,11 +10,6 @@ def load():
     ML = pd.read_csv("processed_data.csv")
     return ML
 
-def reset():
-    st.selection_box.sele
-
-def update_period():
-    return date_range[date_range.index(start_date):date_range.index(end_date)+1]
 
 with st.spinner("Please wait for data to load..."):
     df = load()
@@ -31,9 +24,9 @@ st.divider()
 with st.sidebar:
     # choose date
     st.subheader("1. Choose a period to preview: ")
-    start_date = st.selectbox(label="From", options=date_range, placeholder="Please select a date...", index=2062, key="select_from", on_change=update_period)
-    end_date = st.selectbox("To", [i for i in date_range[date_range.index(start_date):][::-1]], index=0, placeholder="Please select a date", key="select_to", on_change=update_period)
-    period = update_period()
+    start_date = st.selectbox(label="From", options=date_range, placeholder="Please select a date...", index=2062, key="select_from")
+    end_date = st.selectbox("To", [i for i in date_range[date_range.index(start_date):][::-1]], index=0, placeholder="Please select a date", key="select_to")
+    period = date_range[date_range.index(st.session_state.select_from):date_range.index(st.session_state.select_to)+1]
     
     # choose bank
     st.subheader("2. Choose a bank:")
