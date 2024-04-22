@@ -5,6 +5,4 @@ snownlp
 scikit-learn
 matplotlib
 datetime
-pytz
-openpyxl
-plotly.figure_factory
+plotly
