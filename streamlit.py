@@ -12,6 +12,12 @@ def load():
     ML = pd.read_csv("processed_data.csv")
     return ML
 
+def reset():
+    st.selection_box.sele
+
+def update_period():
+    return date_range[date_range.index(start_date):date_range.index(end_date)+1]
+
 with st.spinner("Please wait for data to load..."):
     df = load()
     df["comment_date"] = pd.to_datetime(df["comment_date"]).dt.strftime("%Y-%m-%d")
@@ -25,16 +31,18 @@ st.divider()
 with st.sidebar:
     # choose date
     st.subheader("1. Choose a period to preview: ")
-    start_date = st.selectbox(label="From", options=date_range, placeholder="Please select a date...", index=2062, key="select_from")
-    end_date = st.selectbox("To", [i for i in date_range[date_range.index(start_date):][::-1]], index=0, placeholder="Please select a date", key="select_to")
-    period = date_range[date_range.index(start_date):date_range.index(end_date)+1]
+    start_date = st.selectbox(label="From", options=date_range, placeholder="Please select a date...", index=2062, key="select_from", on_change=update_period)
+    end_date = st.selectbox("To", [i for i in date_range[date_range.index(start_date):][::-1]], index=0, placeholder="Please select a date", key="select_to", on_change=update_period)
+    period = update_period()
     
     # choose bank
     st.subheader("2. Choose a bank:")
     bank_keys = df[df["comment_date"].isin(period)]["bank"].unique().tolist()
-    bank_list = [bank_dic[i] for i in bank_keys]
+    print(bank_keys)
+    bank_list = [bank_dic.get(i, "error") for i in bank_keys]
     bank_box = st.selectbox("Bank to be reviewed", bank_list, index=0, placeholder="Open the dropdown menu for available", key="select_bank")
     chosen_bank = bank_box[0:bank_box.find(" ")]
+
 
 with st.spinner("Please wait for data to load..."):
     # Total volume
@@ -48,7 +56,6 @@ with st.spinner("Please wait for data to load..."):
     st.plotly_chart(fig, use_container_width=True)
 
 
-with st.spinner("Loading data..."):
     st.subheader("Executive Summary during the period")
     to_display = df[(df["comment_date"].isin(period)) & (df["bank"]==chosen_bank)]
 
