@@ -44,8 +44,9 @@ with st.spinner("Loading data..."):
     # TODO #1 General: volume and senitment graph of data
     st.subheader("Executive Summary during the period")
     to_display = df[(df["comment_date"].isin(period)) & (df["bank"]==chosen_bank)]
-    
+    st.write("Average sentiment score: "+str(to_display["sentiment"].mean())[0:6])
     col1, col2 = st.columns(2)
+    # Total volume
     by_date = df[df["bank"]==chosen_bank].groupby('comment_date').size().reset_index(name='total_volume')
     fig = px.bar(by_date, x="comment_date", y="total_volume")
     fig.update_layout(
@@ -54,17 +55,11 @@ with st.spinner("Loading data..."):
         yaxis_title='Number of comments'
     )
     col1.plotly_chart(fig, use_container_width=True)
-    # change df["sentiment"]
-    col2.subheader("Average sentiment score: "+str(to_display["sentiment"].mean())[0:6])
-    by_sentiment = to_display.groupby("bank").size().reset_index(name="portion")
+    # Pie chart
+    by_sentiment = df[df["comment_date"].isin(period)].groupby("bank").size().reset_index(name="portion")
     pie = px.pie(by_sentiment, values='portion', names='bank', title='Composition of sentiment score of each bank')
     col2.plotly_chart(pie, use_container_width=True)
+
+    # Display all comments during the period of the bank
     st.subheader("All comments:")
     st.dataframe(to_display)
-
-
-# group shit by date, no need to loop
-
-# df.groupby(["bank", pd.Grouper(key='date', freq='ME')]).[["sentiment"]].agg(np.mean).reset_index()
-# reset_index --> keep data as data not index
-
