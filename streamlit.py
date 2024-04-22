@@ -49,16 +49,26 @@ with st.spinner("Please wait for data to load..."):
     st.plotly_chart(fig, use_container_width=True)
 
 
-    st.subheader("Executive Summary during the period")
+    st.header("Executive Summary during the period")
     to_display = df[(df["comment_date"].isin(period)) & (df["bank"]==chosen_bank)]
 
     st.info('You are looking at data of '+chosen_bank+' between '+start_date+" and "+end_date+".", icon="ℹ️")
-    st.write("Average sentiment score: "+str(to_display["sentiment"].mean())[0:6])
+    st.subheader("Average sentiment score: "+str(to_display["sentiment"].mean())[0:6])
+
     # Pie chart
-    by_sentiment = df[df["comment_date"].isin(period)].groupby("bank").size().reset_index(name="number")
-    pie = px.pie(by_sentiment, values='number', names='bank', title='Composition of sentiment score of each bank')
+    by_sentiment = df[df["comment_date"].isin(period)].bank.to_list()
+    bank_count = {i: 0 for i in list(bank_dic.keys())}
+    for i in by_sentiment:
+        if "[" not in i:
+            bank_count[i] += 1
+        else:
+            for j in eval(i):
+                bank_count[j]+=1 
+    bank_count = pd.DataFrame(list(bank_count.items()), columns=['Bank', 'Number'])
+    pie = px.pie(bank_count, values='Number', names='Bank', title='Number of comments of all banks during the period')
     st.plotly_chart(pie, use_container_width=True)
 
     # Display all comments during the period of the bank
     st.subheader("All comments:")
     st.dataframe(to_display)
+
