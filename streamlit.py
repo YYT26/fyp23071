@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+import re
 
 st.title('Real-time Monitoring of Social Media Sentiment for Detecting Operational Incidents in Banking')
 
@@ -31,8 +32,16 @@ with st.sidebar:
     # choose bank
     st.subheader("2. Choose a bank:")
     bank_keys = df[df["comment_date"].isin(period)]["bank"].unique().tolist()
-    print(bank_keys)
-    bank_list = [bank_dic.get(i, "error") for i in bank_keys]
+    bank_li = []
+    for i in bank_keys:
+        if i in bank_dic.keys():
+            bank_li.append(bank_dic.get(i, "error"))
+        else:
+            combo = [re.sub('[^a-zA-Z]', '', item.strip()) for item in i.split(",")]
+            for j in combo:
+                if bank_dic.get(j, "error") not in bank_li:
+                    bank_li.append(bank_dic.get(j, "error"))   
+    bank_list = list(set(bank_li))
     bank_box = st.selectbox("Bank to be reviewed", bank_list, index=0, placeholder="Open the dropdown menu for available", key="select_bank")
     chosen_bank = bank_box[0:bank_box.find(" ")]
 
