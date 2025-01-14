@@ -6,7 +6,7 @@ import re
 st.title('Real-time Monitoring of Social Media Sentiment for Detecting Operational Incidents in Banking')
 
 # load
-st.cache(allow_output_mutation=True)
+st.cache_data(allow_output_mutation=True)
 def load():
     ML = pd.read_csv("processed_data.csv")
     return ML
